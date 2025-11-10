@@ -8,7 +8,7 @@ import { Header } from "~/components/Header";
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AI Prompt Library",
+  title: "Genie",
   description: "Browse, submit, and vote on AI prompts",
 };
 

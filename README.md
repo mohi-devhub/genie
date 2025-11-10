@@ -1,4 +1,4 @@
-# AI Prompt Library
+# Genie
 
 A community-driven web application for discovering, sharing, and voting on AI prompts. Features an animated landing page for guests and a full-featured prompt gallery for authenticated users.
 
