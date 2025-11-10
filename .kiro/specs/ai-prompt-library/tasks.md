@@ -1,4 +1,4 @@
-# Implementation Plan
+    # Implementation Plan
 
 - [x] 1. Initialize Next.js project and install dependencies
   - Create Next.js app with TypeScript and App Router
@@ -15,7 +15,7 @@
   - Configure Supabase connection string
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
-- [ ] 3. Configure NextAuth with Google provider and Supabase adapter
+- [x] 3. Configure NextAuth with Google provider and Supabase adapter
   - Create auth configuration file with Google OAuth provider
   - Set up Supabase adapter for NextAuth
   - Configure session strategy and callbacks
@@ -23,7 +23,7 @@
   - Set up environment variables for OAuth credentials
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
 
-- [ ] 4. Set up tRPC server infrastructure
+- [x] 4. Set up tRPC server infrastructure
   - Create tRPC context with session and database access
   - Set up protected and public procedure helpers
   - Create root router
@@ -31,13 +31,13 @@
   - Set up server-side tRPC caller
   - _Requirements: 2.1, 4.4, 5.1_
 
-- [ ] 5. Implement category and model routers
+- [x] 5. Implement category and model routers
   - Create category.getAll procedure to fetch all categories
   - Create model.getAll procedure to fetch all models
   - Add proper TypeScript types for outputs
   - _Requirements: 4.6, 3.1, 3.3_
 
-- [ ] 6. Implement prompt router with filtering and sorting
+- [x] 6. Implement prompt router with filtering and sorting
   - Create prompt.getAll procedure with optional filters (categoryId, modelId, sortBy)
   - Implement query logic to include author, category, model relations
   - Calculate voteScore (count UP votes - count DOWN votes)
@@ -46,7 +46,7 @@
   - Create prompt.create protected procedure with validation
   - _Requirements: 2.1, 2.4, 2.5, 3.2, 3.4, 3.5, 3.6, 3.7, 3.8, 4.2, 4.3, 4.4, 4.5_
 
-- [ ] 7. Implement vote router with toggle logic
+- [x] 7. Implement vote router with toggle logic
   - Create vote.cast protected procedure
   - Implement logic to check existing vote for user and prompt
   - Handle create vote (no existing vote)
