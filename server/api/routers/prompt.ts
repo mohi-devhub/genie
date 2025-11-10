@@ -75,7 +75,10 @@ export const promptRouter = createTRPCRouter({
 
       // Sort by TOP (voteScore) if requested
       if (sortBy === "TOP") {
-        promptsWithVotes.sort((a, b) => b.voteScore - a.voteScore);
+        // Filter to only show prompts with positive votes
+        const topPrompts = promptsWithVotes.filter((p) => p.voteScore > 0);
+        topPrompts.sort((a, b) => b.voteScore - a.voteScore);
+        return topPrompts;
       }
 
       return promptsWithVotes;

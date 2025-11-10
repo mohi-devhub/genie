@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { SessionProvider } from "~/lib/auth/SessionProvider";
+import { TRPCProvider } from "~/lib/trpc/TRPCProvider";
+import { Header } from "~/components/Header";
 
-const inter = Inter({ subsets: ["latin"] });
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AI Prompt Library",
@@ -16,7 +19,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={jetbrainsMono.className}>
+        <SessionProvider>
+          <TRPCProvider>
+            <Header />
+            {children}
+          </TRPCProvider>
+        </SessionProvider>
+      </body>
     </html>
   );
 }
