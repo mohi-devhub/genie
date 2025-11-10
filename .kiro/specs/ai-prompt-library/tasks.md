@@ -7,7 +7,7 @@
   - Configure Tailwind and TypeScript settings
   - _Requirements: 7.1, 7.2_
 
-- [ ] 2. Set up Prisma schema and database connection
+- [x] 2. Set up Prisma schema and database connection
   - Create schema.prisma with User, Account, Session, VerificationToken models for NextAuth
   - Add Category, Model, Prompt, and Vote models with proper relations
   - Define VoteType enum (UP, DOWN)
