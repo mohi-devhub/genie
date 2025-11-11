@@ -87,13 +87,44 @@ export const promptRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        title: z.string().min(1).max(200),
-        promptText: z.string().min(1).max(5000),
-        categoryId: z.string(),
-        modelId: z.string(),
+        title: z.string().min(1, "Title is required").max(200, "Title must be 200 characters or less").trim(),
+        promptText: z.string().min(10, "Prompt must be at least 10 characters").max(5000, "Prompt must be 5000 characters or less").trim(),
+        categoryId: z.string().cuid("Invalid category ID"),
+        modelId: z.string().cuid("Invalid model ID"),
       })
     )
     .mutation(async ({ ctx, input }) => {
+      // Verify category exists
+      const category = await ctx.db.category.findUnique({
+        where: { id: input.categoryId },
+      });
+      if (!category) {
+        throw new Error("Invalid category");
+      }
+
+      // Verify model exists
+      const model = await ctx.db.model.findUnique({
+        where: { id: input.modelId },
+      });
+      if (!model) {
+        throw new Error("Invalid model");
+      }
+
+      // Check for rate limiting - max 10 prompts per hour per user
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+      const recentPrompts = await ctx.db.prompt.count({
+        where: {
+          authorId: ctx.session.user.id,
+          createdAt: {
+            gte: oneHourAgo,
+          },
+        },
+      });
+
+      if (recentPrompts >= 10) {
+        throw new Error("Rate limit exceeded. Please wait before submitting more prompts.");
+      }
+
       const prompt = await ctx.db.prompt.create({
         data: {
           title: input.title,

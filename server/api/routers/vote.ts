@@ -6,13 +6,26 @@ export const voteRouter = createTRPCRouter({
   cast: protectedProcedure
     .input(
       z.object({
-        promptId: z.string(),
+        promptId: z.string().cuid("Invalid prompt ID"),
         type: z.enum(["UP", "DOWN"]),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
       const { promptId, type } = input;
+
+      // Verify prompt exists
+      const prompt = await ctx.db.prompt.findUnique({
+        where: { id: promptId },
+      });
+      if (!prompt) {
+        throw new Error("Prompt not found");
+      }
+
+      // Prevent users from voting on their own prompts
+      if (prompt.authorId === userId) {
+        throw new Error("You cannot vote on your own prompts");
+      }
 
       // Check if vote exists for this user and prompt
       const existingVote = await ctx.db.vote.findUnique({
