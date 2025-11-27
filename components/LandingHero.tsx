@@ -52,7 +52,7 @@ export function LandingHero() {
           <p className="mb-8 text-lg text-muted-foreground md:text-xl">
             A community-driven library of effective prompts for GPT, Claude, Gemini, and more.
             <br />
-            Share, discover, and vote on the prompts that work.
+            Share, discover, and vote on the prompts that work best.
           </p>
 
           {/* Rotating prompt preview */}
@@ -63,7 +63,7 @@ export function LandingHero() {
               }`}
             >
               <p className="font-mono text-sm text-muted-foreground md:text-base">
-                "{FEATURED_PROMPTS[currentPromptIndex]}"
+                &ldquo;{FEATURED_PROMPTS[currentPromptIndex]}&rdquo;
               </p>
             </div>
           </div>

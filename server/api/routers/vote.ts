@@ -1,6 +1,8 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { VoteType } from "@prisma/client";
+import { rateLimiters } from "~/lib/rate-limit";
 
 export const voteRouter = createTRPCRouter({
   cast: protectedProcedure
@@ -14,17 +16,32 @@ export const voteRouter = createTRPCRouter({
       const userId = ctx.session.user.id;
       const { promptId, type } = input;
 
+      // Rate limiting: 100 votes per minute per user
+      const rateLimitResult = rateLimiters.voting.check(userId);
+      if (!rateLimitResult.allowed) {
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "Too many votes. Please slow down and try again later.",
+        });
+      }
+
       // Verify prompt exists
       const prompt = await ctx.db.prompt.findUnique({
         where: { id: promptId },
       });
       if (!prompt) {
-        throw new Error("Prompt not found");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Prompt not found",
+        });
       }
 
       // Prevent users from voting on their own prompts
       if (prompt.authorId === userId) {
-        throw new Error("You cannot vote on your own prompts");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You cannot vote on your own prompts",
+        });
       }
 
       // Check if vote exists for this user and prompt

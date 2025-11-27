@@ -6,7 +6,7 @@ import { PromptGallery } from "~/components/PromptGallery";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Browse Prompts - Genie",
+  title: "Browse Prompts - Lokha",
   description: "Browse and discover AI prompts for various models and categories.",
 };
 

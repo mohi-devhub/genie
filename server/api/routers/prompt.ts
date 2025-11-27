@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 import { VoteType } from "@prisma/client";
 
@@ -99,7 +100,10 @@ export const promptRouter = createTRPCRouter({
         where: { id: input.categoryId },
       });
       if (!category) {
-        throw new Error("Invalid category");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid category selected",
+        });
       }
 
       // Verify model exists
@@ -107,7 +111,10 @@ export const promptRouter = createTRPCRouter({
         where: { id: input.modelId },
       });
       if (!model) {
-        throw new Error("Invalid model");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid model selected",
+        });
       }
 
       // Check for rate limiting - max 10 prompts per hour per user
@@ -122,7 +129,10 @@ export const promptRouter = createTRPCRouter({
       });
 
       if (recentPrompts >= 10) {
-        throw new Error("Rate limit exceeded. Please wait before submitting more prompts.");
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "Rate limit exceeded. You can submit up to 10 prompts per hour.",
+        });
       }
 
       const prompt = await ctx.db.prompt.create({

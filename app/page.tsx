@@ -6,7 +6,7 @@ import { PromptShowcase } from "~/components/PromptShowcase";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Genie - Discover and Share AI Prompts",
+  title: "Lokha - Discover and Share AI Prompts",
   description: "Browse, submit, and vote on AI prompts for various models and categories. A community-driven platform for discovering effective AI prompts.",
 };
 

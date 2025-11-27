@@ -18,7 +18,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <Link href={session ? "/prompts" : "/"}>
             <h1 className="text-xl font-bold cursor-pointer hover:opacity-80 transition-opacity">
-              Genie
+              Lokha
             </h1>
           </Link>
         </div>
