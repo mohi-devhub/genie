@@ -7,7 +7,6 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 import { getServerAuthSession } from "../auth";
 import { db } from "../db";
-import { logger } from "~/lib/logger";
 
 /**
  * Create the tRPC context.
@@ -31,7 +30,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
   errorFormatter({ shape, error }) {
     // Log errors for monitoring
     if (error.code === "INTERNAL_SERVER_ERROR") {
-      logger.error("tRPC Internal Server Error", error.cause, {
+      console.error("tRPC Internal Server Error:", error.cause, {
         code: error.code,
       });
     }
