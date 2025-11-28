@@ -2,10 +2,16 @@ import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const modelRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.model.findMany({
-      orderBy: {
-        name: "asc",
-      },
-    });
+    try {
+      const models = await ctx.db.model.findMany({
+        orderBy: {
+          name: "asc",
+        },
+      });
+      return models;
+    } catch (error) {
+      console.error("[model.getAll] Database error:", error);
+      throw error;
+    }
   }),
 });

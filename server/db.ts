@@ -1,12 +1,11 @@
 import { PrismaClient } from "@prisma/client";
-import { logger } from "~/lib/logger";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
 /**
- * Create Prisma client with production-ready configuration
+ * Create Prisma client with serverless-optimized configuration
  */
 const createPrismaClient = () => {
   return new PrismaClient({
@@ -17,6 +16,13 @@ const createPrismaClient = () => {
     
     // Production error handling
     errorFormat: process.env.NODE_ENV === "development" ? "pretty" : "minimal",
+    
+    // Datasource configuration for connection pooling
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL,
+      },
+    },
   });
 };
 
@@ -25,17 +31,5 @@ export const db = globalForPrisma.prisma ?? createPrismaClient();
 // Prevent multiple instances in development
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = db;
-}
-
-// Graceful shutdown
-if (process.env.NODE_ENV === "production") {
-  const shutdown = async () => {
-    logger.info("Shutting down Prisma client...");
-    await db.$disconnect();
-    process.exit(0);
-  };
-
-  process.on("SIGINT", shutdown);
-  process.on("SIGTERM", shutdown);
 }
 
