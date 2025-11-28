@@ -32,6 +32,14 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
       },
     }),
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      // Default to prompts page after sign in
+      return `${baseUrl}/prompts`;
+    },
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [

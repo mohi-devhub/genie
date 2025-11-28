@@ -27,7 +27,7 @@ export function LoginButton() {
   // Show login button when unauthenticated
   if (!session) {
     return (
-      <Button onClick={() => signIn("google")}>
+      <Button onClick={() => signIn("google", { callbackUrl: "/prompts" })}>
         Login
       </Button>
     );
